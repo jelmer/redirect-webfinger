@@ -1,5 +1,5 @@
 FROM debian:sid-slim
 
-RUN apt -y update && apt -y install python3-aiohttp
-COPY serve.py /serve.py
-CMD python3 /serve.py
+COPY . .
+RUN apt -y update && apt -y install python3-pip && pip3 install .
+ENTRYPOINT ["python3", "-m", "redirect_webfinger"]
