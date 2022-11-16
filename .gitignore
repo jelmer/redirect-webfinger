@@ -2,3 +2,4 @@
 __pycache__
 dist
 redirect_webfinger.egg-info
+.hypothesis
