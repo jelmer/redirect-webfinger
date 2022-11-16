@@ -4,9 +4,9 @@
 __version__ = (0, 0, 2)
 
 
-def format_response(acct, *, mastodon_server, mastodon_user):
+def format_response(resource, *, mastodon_server, mastodon_user):
     return {
-      "subject": acct,
+      "subject": resource,
       "aliases": [
         f"https://{mastodon_server}/@{mastodon_user}",
         f"https://{mastodon_server}/users/{mastodon_user}"
