@@ -1,0 +1,25 @@
+---
+name: Disperse configuration
+
+"on":
+  - push
+  - pull_request
+
+jobs:
+  disperse:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: |
+          sudo apt install protobuf-compiler
+      - name: Install disperse
+        run: |
+          pip install git+https://github.com/jelmer/disperse
+      - name: Validate disperse.conf
+        run: |
+          PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python disperse validate .
