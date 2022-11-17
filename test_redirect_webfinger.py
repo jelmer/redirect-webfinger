@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from redirect_webfinger.__main__ import create_app
+import pytest
+from redirect_webfinger.__main__ import create_app, parse_args
 
 
 def create_test_app():
@@ -38,3 +39,24 @@ async def test_valid(aiohttp_client):
                   {'href': 'https://mastodon.cloud/users/jelmer', 'rel': 'self', 'type': 'application/activity+json'},
                   {'rel': 'http://ostatus.org/schema/1.0/subscribe', 'template': 'https://mastodon.cloud/authorize_interaction?uri={uri}'}],
         'subject': 'acct:jelmer@jelmer.uk'}
+
+
+def test_parse_args():
+    args = parse_args([], environ={
+        'ACCT': 'jelmer@jelmer.uk', 
+        'MASTODON_SERVER': 'mastodon.cloud',
+        'MASTODON_USER': 'jelmer'})
+    assert args.acct == ['jelmer@jelmer.uk']
+    assert args.mastodon_server == 'mastodon.cloud'
+    assert args.mastodon_user == 'jelmer'
+
+    with pytest.raises(SystemExit):
+        parse_args([], environ={})
+
+    args = parse_args([
+        '--acct=jelmer@jelmer.uk',
+        '--mastodon-server=mastodon.cloud',
+        '--mastodon-user=jelmer'], {})
+    assert args.acct == ['jelmer@jelmer.uk']
+    assert args.mastodon_server == 'mastodon.cloud'
+    assert args.mastodon_user == 'jelmer'

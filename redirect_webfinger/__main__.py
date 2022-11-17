@@ -2,6 +2,7 @@
 
 import logging
 import os
+import sys
 
 from aiohttp import web
 
@@ -33,25 +34,30 @@ def create_app(accts: list[str], mastodon_server: str, mastodon_user: str) -> we
     return app
 
 
-def main(argv=None):
+def parse_args(argv=None, environ=os.environ):
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--acct', type=str, help='Example: jelmer@jelmer.uk', nargs='*',
-        default=os.environ.get('ACCT'))
+        default=environ['ACCT'].split(',') if 'ACCT' in environ else None)
     parser.add_argument(
         '--mastodon-server', type=str, help='Example: mastodon.cloud',
-        default=os.environ.get('MASTODON_SERVER'))
+        default=environ.get('MASTODON_SERVER'))
     parser.add_argument(
         '--mastodon-user', type=str, help='Example: jelmer',
-        default=os.environ.get('MASTODON_USER'))
-    args = parser.parse_args(argv)
+        default=environ.get('MASTODON_USER'))
 
+    args = parser.parse_args(argv)
     if not args.acct or not args.mastodon_server or not args.mastodon_user:
         parser.print_usage()
-        return 1
+        sys.exit(1)
+    return args
 
+
+def main(argv=None):
     logging.basicConfig()
+
+    args = parse_args(argv)
 
     app = create_app(args.acct, mastodon_server=args.mastodon_server,
                      mastodon_user=args.mastodon_user)
@@ -60,5 +66,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    import sys
     sys.exit(main(sys.argv[1:]))
