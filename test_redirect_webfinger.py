@@ -30,6 +30,7 @@ async def test_valid(aiohttp_client):
     resp = await client.get(
         '/.well-known/webfinger?resource=acct:jelmer@jelmer.uk')
     assert resp.status == 200
+    assert resp.content_type == 'application/jrd+json'
 
     json = await resp.json()
 
