@@ -20,7 +20,8 @@ async def handle_webfinger(request: web.Request) -> web.Response:
     return web.json_response(format_response(
         resource=resource,
         mastodon_server=request.app['mastodon_server'],
-        mastodon_user=request.app['mastodon_user']))
+        mastodon_user=request.app['mastodon_user']),
+    content_type='application/jrd+json')
 
 
 def create_app(accts: list[str], mastodon_server: str, mastodon_user: str) -> web.Application:
