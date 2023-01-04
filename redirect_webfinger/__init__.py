@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 
-__version__ = (0, 0, 5)
+__version__ = (0, 0, 6)
 
 
 def format_response(resource, *, mastodon_server, mastodon_user):
