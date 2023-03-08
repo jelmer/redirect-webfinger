@@ -1,3 +1,52 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.2"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "redirect-webfinger"
+description = "Basic implementation of webfinger that redirects to another server"
+readme = "README.rst"
+authors = [{name = "Jelmer Vernooĳ", email = "jelmer@jelmer.uk"}]
+license = {text = "Apachev2"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Operating System :: POSIX",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "aiohttp",
+    "aiohttp_openmetrics",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/jelmer/redirect-webfinger"
+
+[project.scripts]
+redirect-webfinger = "redirect_webfinger.__main__:main"
+
+[project.optional-dependencies]
+testing = ["pytest-aiohttp"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages]
+find = {namespaces = false}
+
+[tool.setuptools.dynamic]
+version = {attr = "redirect_webfinger.__version__"}
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.distutils.bdist_wheel]
+universal = 1
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
